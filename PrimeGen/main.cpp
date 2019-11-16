@@ -43,7 +43,7 @@ void primesThread(T min, T max) {
 
 
 	for (T i = min; i < max; i++) {
-		if (isPrime<used_type>(i)) {
+		if (IsPrime(i)) {
 			log_result<T>(i);
 		}
 		incrementCounter();
@@ -58,14 +58,23 @@ int main()
 		return 1;
 	}
 
+	used_type max;
+	cout << "how many iterations?: ";
+	cin >> max;
 
+	char choice;
+	cout << "change thread priority? (y/n): ";
+	cin >> choice;
+	if (choice == 'Y' || choice == 'y')
+		threadP = chooseThreadP();
 
-	vector<Range<used_type>> r = splitinrange<used_type>(0, 10000000, thread_count);
+	cout << "Thread priority is " << threadP << endl;
+	vector<Range<used_type>> r = splitinrange<used_type>(0, max, thread_count);
 	vector<thread> threads;
 
 
 
-
+	SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
 	chrono::steady_clock::time_point begin = chrono::steady_clock::now();
 
@@ -95,15 +104,21 @@ int main()
 	cout << "Completed " << counter << " iterations in " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "ms" << endl
 		<< "Memory consumed by vector: " << sizeof(used_type) * p.size() << " bytes" << endl
 		<< "Found " << primesfound << " prime numbers" << endl;
-	cout << "Sorting...";
+
+	cout << "Write to file? (y/n): ";
+	cin >> choice;
+	if (choice == 'Y' || choice == 'y') {
+
+		cout << "Sorting...";
 
 		sort(p.begin(), p.end());
 
 		cout << "Done." << endl << "Writing to file 'primes.txt'...";
-
-	for (unsigned int i = 0; i < p.size(); i++) {
-		outFile << p[i] << endl;
+		outFile.open("primes.txt", ios::out);
+		for (unsigned int i = 0; i < p.size(); i++) {
+			outFile << p[i] << endl;
+		}
+		cout << " Done." << endl << endl;
 	}
-	cout << " Done." << endl << endl;
 	outFile.close();
 }

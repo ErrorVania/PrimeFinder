@@ -39,15 +39,14 @@ bool witness(int a, int n)
 		return true;
 	return false;
 }
-
-inline bool IsPrime(int number)
+inline bool IsPrime(unsigned int number)
 {
 	if (((!(number & 1)) && number != 2) || (number < 2) || (number % 3 == 0 && number != 3))
 		return (false);
 
 	if (number < 1373653)
 	{
-		for (int k = 1; 36 * k * k - 12 * k < number; ++k)
+		for (unsigned int k = 1; 36 * k * k - 12 * k < number; ++k)
 			if ((number % (6 * k + 1) == 0) || (number % (6 * k - 1) == 0))
 				return (false);
 
